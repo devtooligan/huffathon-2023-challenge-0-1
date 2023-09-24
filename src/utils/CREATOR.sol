@@ -11,7 +11,7 @@ interface IChallenge {
 // ******* Players do not need to change anything here. *******
 library CREATOR {
 
-    uint8 constant internal _challengeId = 0xff; // IMPORTANT: CREATOR TO UPDATE THIS!
+    uint8 constant internal _challengeId = 0x22; // IMPORTANT: CREATOR TO UPDATE THIS!
 
     // IMPORTANT: CREATOR TO UPDATE THIS!
     // This function returns true or false if the solution is correct.
@@ -30,7 +30,6 @@ library CREATOR {
         uint start = gasleft();
         IChallenge(solution).stackIt();
         gasUsed = start - gasleft();
-        revert("IMPORTANT: CREATOR to update gasReport()");
     }
 
     function challengeId() public pure returns (uint8) {

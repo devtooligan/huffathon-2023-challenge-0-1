@@ -10,7 +10,7 @@ contract SolutionTest is Test, Utils {
 
     function setUp() public {}
 
-    function testchallengeId() public {
+    function testChallengeId() public {
         require(challengeId() != 0xff, "IMPORTANT: CREATOR to update challengeId!");
     }
 
