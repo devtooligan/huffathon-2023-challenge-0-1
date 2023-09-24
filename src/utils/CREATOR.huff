@@ -28,7 +28,7 @@
     no_fail:
 }
 
-#define macro VERIFY_STACKIT_AND_RETURN() = takes (10) returns (0) {
+#define macro VERIFY_STACKIT_AND_RETURN() = takes (11) returns (0) {
     // verify
     // setup memory
     caller    0x69 shr 0x00 mstore    // memory: 0x00 caller shifted
