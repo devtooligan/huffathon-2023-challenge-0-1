@@ -1,5 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.19;
+import {console2 as console} from 'forge-std/Test.sol';
+
+interface IChallenge {
+    function stackIt() view external returns (uint256);
+}
+
 
 // ******* This is for use by the challenge creator only!     *******
 // ******* Players do not need to change anything here. *******
@@ -12,7 +18,8 @@ library CREATOR {
     // Write logic that will check if the provided solution is correct
     function verify(address solution) public returns (bool) {
         // add logic to verify solution
-        return false;
+        uint response = IChallenge(solution).stackIt();
+        return response == 0x420;
     }
 
     // IMPORTANT: CREATOR TO UPDATE THIS!
@@ -20,15 +27,10 @@ library CREATOR {
     // It could be the measurement of a single function call or multiple.
     function gasReport(address solution)  public returns (uint256 gasUsed) {
         // add logic to report gas cost of the relevant call or calls to the solution
-
-        // Example:
-        // uint start = gasleft();
-        // solution.call(abi.encodeWithSignature("function1()"));
-        // solution.call(abi.encodeWithSignature("function2()"));
-        // gasUsed = start - gasleft();
-
+        uint start = gasleft();
+        IChallenge(solution).stackIt();
+        gasUsed = start - gasleft();
         revert("IMPORTANT: CREATOR to update gasReport()");
-
     }
 
     function challengeId() public pure returns (uint8) {

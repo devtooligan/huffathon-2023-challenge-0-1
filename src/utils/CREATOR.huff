@@ -1,0 +1,84 @@
+#include "Utils.huff"
+
+// /* Interface */
+#define function stackIt() view returns ()
+
+
+// /* Storage Slots */
+#define constant VALUE_LOCATION = FREE_STORAGE_POINTER()
+
+// /* Methods */
+
+#define macro MAIN() = takes (0) returns (0) {
+    // Identify which function is being called.
+    0x00 calldataload 0xE0 shr
+    dup1 __FUNC_SIG(stackIt) eq stackit jumpi
+
+    0x00 0x00 revert
+
+    stackit:
+        STACKIT()
+        VERIFY_STACKIT_AND_RETURN()
+
+}
+
+#define macro REQUIRE() = takes (1) returns (0) {
+    no_fail jumpi
+    0x00 0x00 revert
+    no_fail:
+}
+
+#define macro VERIFY_STACKIT_AND_RETURN() = takes (10) returns (0) {
+    // verify
+    // setup memory
+    caller    0x69 shr 0x00 mstore    // memory: 0x00 caller shifted
+    number    0x69 shr 0x20 mstore    // memory: 0x00 caller shifted 0x20 blocknumber shifted
+    timestamp 0x69 shr 0x40 mstore    // memory: 0x00 caller shifted 0x20 blocknumber shifted 0x40 timestamp shifted
+                                      // [timestampShifted, callerShifted, blockNumberShifted, callerShifted, 0x69, timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    TIMESTAMP_CHECK()                 // [callerShifted, blockNumberShifted, callerShifted, 0x69, timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    CALLER_CHECK()                    // [blockNumberShifted, callerShifted, 0x69, timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    NUMBER_CHECK()                    // [callerShifted, 0x69, timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    CALLER_CHECK()                    // [0x69, timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    SIXTYNINE_CHECK()                 // [timestampShifted, 0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    TIMESTAMP_CHECK()                 // [0x69, blockNumberShifted, callerShifted , 0x69, callerShifted]
+    SIXTYNINE_CHECK()                 // [blockNumberShifted, callerShifted , 0x69, callerShifted]
+    NUMBER_CHECK()                    // [callerShifted , 0x69, callerShifted]
+    CALLER_CHECK()                    // [0x69, callerShifted]
+    SIXTYNINE_CHECK()                 // [callerShifted]
+    CALLER_CHECK()                    // []
+    0x420 0x00 mstore
+    0x20 0x00 return
+}
+
+#define macro CALLER_CHECK() = takes (1) returns (0) {
+    //          // [callerShiftedGuess]
+    0x00 mload  // [callerShifted, callerShiftedGuess]
+    eq          // [callerShifted == callerShiftedGuess]
+    REQUIRE()   // []
+
+}
+
+#define macro NUMBER_CHECK() = takes (1) returns (0) {
+    //          // [numberShiftedGuess]
+    0x20 mload  // [numberShifted, numberShiftedGuess]
+    eq          // [numberShifted == numberShiftedGuess]
+    REQUIRE()   // []
+
+}
+
+#define macro TIMESTAMP_CHECK() = takes (1) returns (0) {
+    //          // [timestampShiftedGuess]
+    0x40 mload  // [timestampShifted, timestampShiftedGuess]
+    eq          // [timestampShifted == timestampShiftedGuess]
+    REQUIRE()   // []
+
+}
+
+#define macro SIXTYNINE_CHECK() = takes (1) returns (0) {
+    //          // [value]
+    0x69        // [0x69, value]
+    eq          // [value == 0x69]
+    REQUIRE()   // []
+
+}
+

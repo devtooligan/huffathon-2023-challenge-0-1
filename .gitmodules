@@ -4,3 +4,6 @@
 [submodule "lib/huff-runner"]
 	path = lib/huff-runner
 	url = https://github.com/whitenois3/huff-runner
+[submodule "lib/Huffpoint"]
+	path = lib/Huffpoint
+	url = https://github.com/devtooligan/Huffpoint
