@@ -6,7 +6,23 @@ Greetings, Huffoor! This document will guide you through the steps to solve this
 
 In this challenge you must complete a function with the goal of correctly setting up the stack in the most gas efficient way. You do not need to write MAIN() or any other functions, this is strictly an exercise in stack building.
 
+You need to add logic to the [STACKIT()](https://github.com/devtooligan/huffathon-2023-challenge-0-1/blob/main/src/PLAYER_SOLUTION.huff#L3-L23) macro which will setup the stack as follows: 
 
+```
+     final stack: [
+        block.timestamp >> 0x69,  // top of stack
+        msg.sender >> 0x69,
+        block.number >> 0x69,
+        msg.sender >> 0x69,
+        0x69,
+        block.timestamp >> 0x69,
+        0x69,
+        block.number >> 0x69,
+        msg.sender >> 0x69 ,
+        0x69,
+        msg.sender >> 0x69
+    ]
+```
 
 ## Getting Started
 
